@@ -7,6 +7,7 @@ import {
     GoogleAuthProvider,
 } from "firebase/auth";
 import "./auth.css";
+import PixelSnow from "./PixelSnow";
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -48,8 +49,26 @@ export default function Auth() {
     };
 
     return (
-        <div className="auth-page">
-            <div className="auth-card">
+        <>
+            <div className="snow-background" style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
+                <PixelSnow
+                    color="#a8d0ff"
+                    flakeSize={0.01}
+                    minFlakeSize={1.25}
+                    pixelResolution={200}
+                    speed={1.25}
+                    density={0.3}
+                    direction={125}
+                    brightness={1}
+                    depthFade={8}
+                    farPlane={20}
+                    gamma={0.4545}
+                    variant="square"
+                    style={{ width: '100%', height: '100%' }}
+                />
+            </div>
+            <div className="auth-page">
+                <div className="auth-card">
 
                 <div className="auth-brand">
                     <div className="auth-logo"><img src="https://static.vecteezy.com/system/resources/thumbnails/033/539/545/small/functioning-of-the-human-body-and-the-brain-transparent-background-png.png" style={{ width: "135px", height: "135px" }} alt="cognitive" /></div>
@@ -170,5 +189,6 @@ export default function Auth() {
                 )}
             </div>
         </div>
+        </>
     );
 }
