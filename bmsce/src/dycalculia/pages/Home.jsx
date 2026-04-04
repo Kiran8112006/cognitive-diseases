@@ -87,12 +87,12 @@ export default function Home() {
     };
 
     return (
-        <>
+        <div className="dycalculia-app">
             <HomeStyles />
             <div className="home-screen">
                 <header className="home-header">
                     <h1 className="home-title">{t("dyscalculiaMode")} <span>{t("assessment")}</span></h1>
-                    <p className="home-subtitle">{t("headerSubtitle")}</p>’
+                    <p className="home-subtitle">{t("headerSubtitle")}</p>
                 </header>
 
                 {/* Tests Carousel */}
@@ -190,7 +190,7 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 

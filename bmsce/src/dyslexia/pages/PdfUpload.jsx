@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { jsPDF } from "jspdf";
 import { db, auth } from "@/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 
 export default function PdfUpload() {
+    const navigate = useNavigate();
     const [file, setFile] = useState(null);
     const [loading, setLoading] = useState(false);
     const [activeTab, setActiveTab] = useState("summary");
@@ -161,7 +163,12 @@ export default function PdfUpload() {
     const tabs = ["summary", "syllables", "mindmap"];
 
     return (
-        <div style={styles.container}>
+        <div className="dyslexia-app" style={styles.container}>
+            <div style={styles.topBar}>
+                <button onClick={() => navigate("/dyslexia", { replace: true })} style={styles.backHomeBtn}>
+                    🏠 Back to Dyslexia Home
+                </button>
+            </div>
             <h1 style={styles.heading}>📄 UPLOAD PDF</h1>
 
             <div style={styles.uploadBox}>
@@ -285,6 +292,24 @@ const styles = {
         fontWeight: 700,
         marginBottom: "20px",
         letterSpacing: "2px",
+    },
+    topBar: {
+        display: "flex",
+        justifyContent: "flex-start",
+        marginBottom: "20px",
+    },
+    backHomeBtn: {
+        background: "rgba(30, 41, 59, 0.6)",
+        border: "1px solid rgba(96, 165, 250, 0.3)",
+        color: "#94a3b8",
+        padding: "8px 16px",
+        borderRadius: "8px",
+        fontSize: "14px",
+        cursor: "pointer",
+        transition: "all 0.2s",
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
     },
     uploadBox: {
         maxWidth: "600px",

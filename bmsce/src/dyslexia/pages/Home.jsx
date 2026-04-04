@@ -172,22 +172,7 @@ const Home = () => {
     };
 
     return (
-        <div style={styles.container}>
-            {/* Language Selector */}
-            <div style={styles.languageSelector}>
-                <select 
-                    value={language}
-                    onChange={(e) => changeLanguage(e.target.value)}
-                    style={styles.languageDropdown}
-                >
-                    {languages.map(lang => (
-                        <option key={lang.code} value={lang.code}>
-                            {lang.nativeName}
-                        </option>
-                    ))}
-                </select>
-            </div>
-
+        <div className="dyslexia-app" style={styles.container}>
             {/* User Info Header */}
             {user && (
                 <div style={styles.userHeader}>
@@ -389,7 +374,6 @@ const styles = {
         minHeight: "100vh",
         padding: "50px 20px",
         textAlign: "center",
-        fontFamily: "'OpenDyslexic', sans-serif",
     },
     languageSelector: {
         position: "fixed",

@@ -11,7 +11,7 @@ import PixelSnow from "./PixelSnow";
 
 const googleProvider = new GoogleAuthProvider();
 
-export default function Auth({ setPage }) {
+export default function Auth() {
     const [tab, setTab] = useState("login");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { auth } from "./firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { LanguageProvider } from "./LanguageContext";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 
 import Landing from "./landing";
 import Auth from "./Auth.jsx";
@@ -18,19 +18,24 @@ import DyslexiaPdfUpload from "./dyslexia/pages/PdfUpload";
 import DycalculiaHome from "./dycalculia/pages/Home";
 import DycalculiaSmartTest from "./dycalculia/features/smartTest/tests/SmartTest";
 
-function MainApp() {
+export default function App() {
     const [user, setUser] = useState(null);
-    const [page, setPage] = useState("landing");
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
             setLoading(false);
+            
+            // If user logs in while on /auth, move to dashboard
+            if (currentUser && window.location.pathname === "/auth") {
+                navigate("/dashboard", { replace: true });
+            }
         });
 
         return () => unsubscribe();
-    }, []);
+    }, [navigate]);
 
     if (loading) {
         return (
@@ -48,30 +53,13 @@ function MainApp() {
         );
     }
 
-    // If logged in → go to hero
-    if (user) {
-        return (
-            <Hero user={user} />
-        );
-    }
-
-    // Navigation
-    if (page === "auth") {
-        return (
-            <Auth setPage={setPage} />
-        );
-    }
-
-    return (
-        <Landing goToAuth={() => setPage("auth")} />
-    );
-}
-
-export default function App() {
     return (
         <LanguageProvider>
             <Routes>
-                <Route path="/" element={<MainApp />} />
+                {/* Main Routing */}
+                <Route path="/" element={<Landing user={user} />} />
+                <Route path="/auth" element={user ? <Navigate to="/dashboard" replace /> : <Auth />} />
+                <Route path="/dashboard" element={user ? <Hero user={user} /> : <Navigate to="/auth" replace />} />
                 
                 {/* Dyslexia Routes */}
                 <Route path="/dyslexia" element={<DyslexiaHome />} />
@@ -85,4 +73,4 @@ export default function App() {
             </Routes>
         </LanguageProvider>
     );
-}
+}

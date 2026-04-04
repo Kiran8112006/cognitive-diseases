@@ -1,7 +1,7 @@
-﻿import PixelSnow from './PixelSnow';
 import './landing.css';
 import { useLanguage } from './LanguageContext';
 import { getTranslation, languages } from './translations';
+import { useNavigate } from 'react-router-dom';
 
 const dyslexiaImages = [
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_3wys4e1z3zHSjP0Zfs0Oik-lJycvN5HZzA&s',
@@ -33,53 +33,69 @@ function ImageGallery({ images }) {
     );
 }
 
-export default function Landing({ goToAuth }) {
+export default function Landing({ user }) {
     const { language, changeLanguage } = useLanguage();
     const t = (key) => getTranslation(language, key);
-    
+    const navigate = useNavigate();
+
+    const getUserName = () => {
+        if (!user) return "";
+        if (user.displayName) return user.displayName;
+        return user.email?.split("@")[0] || "User";
+    };
+
     return (
         <>
-            {/* ── Full-screen snow background (fixed) ── */}
-            <div className="snow-background">
-                <PixelSnow
-                    color="#a8d0ff"
-                    flakeSize={0.01}
-                    minFlakeSize={1.25}
-                    pixelResolution={200}
-                    speed={1.25}
-                    density={0.3}
-                    direction={125}
-                    brightness={1}
-                    depthFade={8}
-                    farPlane={20}
-                    gamma={0.4545}
-                    variant="square"
-                    style={{ width: '100%', height: '100%' }}
-                />
-            </div>
+            {/* ── Background (Premium Radial Gradient) ── */}
+            <div className="snow-background"></div>
 
             <div className="landing-page">
-                {/* ── Language Selector (Top Left) ── */}
-                <div style={styles.languageSelector}>
-                    <select 
-                        value={language} 
-                        onChange={(e) => changeLanguage(e.target.value)}
-                        style={styles.languageDropdown}
-                    >
-                        {languages.map(lang => (
-                            <option key={lang.code} value={lang.code}>
-                                {lang.nativeName}
-                            </option>
-                        ))}
-                    </select>
-                </div>
 
                 {/* ── Navigation ── */}
                 <header className="landing-header">
-                    <h1>{t("ddap")}</h1>
-                    <button id="login-btn" className="login-button" onClick={goToAuth}>
-                        {t("login")}
-                    </button>
+                    <div className="nav-logo" onClick={() => navigate('/')}>
+                        <svg className="nav-logo-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-1.54Z" />
+                            <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-1.54Z" />
+                        </svg>
+                        <span className="nav-logo-text">{t("ddap")}</span>
+                    </div>
+
+                    <div className="nav-actions">
+                        <div className="nav-lang-picker">
+                            <select
+                                value={language}
+                                onChange={(e) => changeLanguage(e.target.value)}
+                                className="nav-lang-select"
+                            >
+                                {languages.map(lang => (
+                                    <option key={lang.code} value={lang.code}>
+                                        {lang.nativeName.split(' ')[0]} {/* Show short name if needed, or just lang.nativeName */}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+
+                        {user ? (
+                            <div className="user-profile-badge" onClick={() => navigate('/dashboard')}>
+                                <span className="user-name">{getUserName()}</span>
+                                <div className="user-avatar">
+                                    {user.photoURL ? (
+                                        <img src={user.photoURL} alt="User" />
+                                    ) : (
+                                        <span className="avatar-placeholder">👤</span>
+                                    )}
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="guest-actions">
+                                <button className="nav-get-started" onClick={() => navigate('/auth')}>
+                                    {t("getStarted")}
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </header>
 
                 {/* ── Hero Section ── */}
@@ -129,7 +145,7 @@ export default function Landing({ goToAuth }) {
                             <ImageGallery images={dyscalculiaImages} />
                         </section>
 
-                       
+
 
                         {/* Footer */}
                         <footer className="footer-section">
@@ -156,23 +172,3 @@ export default function Landing({ goToAuth }) {
         </>
     );
 }
-
-const styles = {
-    languageSelector: {
-        position: "fixed",
-        top: 20,
-        left: 20,
-        zIndex: 100,
-    },
-    languageDropdown: {
-        background: "rgba(30, 41, 59, 0.9)",
-        border: "1px solid rgba(96, 165, 250, 0.3)",
-        color: "#cbd5e1",
-        padding: "8px 12px",
-        borderRadius: "8px",
-        fontSize: "14px",
-        fontFamily: "inherit",
-        cursor: "pointer",
-        backdropFilter: "blur(8px)",
-    },
-};

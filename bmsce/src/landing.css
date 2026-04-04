@@ -1,5 +1,9 @@
 /* ── Reset ────────────────────────────────────────────── */
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 /* ── Base ─────────────────────────────────────────────── */
 body {
@@ -9,12 +13,13 @@ body {
   overflow-x: hidden;
 }
 
-/* ── Snow background (fixed, full-screen) ─────────────── */
+/* ── Background (Premium Radial Gradient) ─────────────── */
 .snow-background {
   position: fixed;
   inset: 0;
   z-index: 0;
-  pointer-events: none;
+  background: radial-gradient(circle at top, #0f172a, #020411);
+  box-shadow: inset 0 0 120px rgba(59, 130, 246, 0.05);
 }
 
 /* ── Page wrapper (sits above snow) ──────────────────── */
@@ -26,84 +31,225 @@ body {
 
 /* ── Fixed nav bar ────────────────────────────────────── */
 .landing-header {
-  position: fixed;
-  top: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 40px);
-  max-width: 1240px;
+  position: sticky;
+  top: 0;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 24px;
-  background: rgba(5, 13, 30, 0.75);
-  border-radius: 18px;
-  border: 1px solid rgba(120, 180, 255, 0.25);
-  backdrop-filter: blur(14px);
-  z-index: 10;
+  padding: 16px 60px;
+  background: #0f172a;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  z-index: 100;
 }
 
-.landing-header h1 {
-  font-size: 1.9rem;
-  font-weight: 700;
-  color: #d1e9ff;
-  letter-spacing: 0.04em;
-}
-
-.login-button {
-  border: none;
-  background: linear-gradient(135deg, #3b82f6, #1e3a8a);
-  color: #fff;
-  padding: 10px 24px;
-  border-radius: 999px;
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.nav-logo:hover {
+  opacity: 0.85;
+}
+
+.nav-logo-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2563eb;
+  letter-spacing: -0.01em;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-lang-select {
+  background: rgba(15, 23, 42, 0.6);
+  /* Use a darker, more solid base */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #f8fafc;
+  /* Lighter text for better contrast */
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s;
+  /* Reset default appearance to style it consistently */
+  appearance: auto;
+}
+
+.nav-lang-select option {
+  background: #0f172a;
+  /* Force dark background for dropdown items */
+  color: #f8fafc;
+  padding: 12px;
+}
+
+.nav-lang-select:hover {
+  background: rgba(15, 23, 42, 0.9);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+}
+
+
+.guest-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* Tighter spacing for a unified look */
+}
+
+.nav-get-started {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.nav-get-started:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
+}
+
+.user-profile-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 6px 6px 6px 16px;
+  border-radius: 99px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(8px);
+}
+
+.user-profile-badge:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.user-name {
   font-size: 0.9rem;
   font-weight: 600;
-  transition: opacity 0.2s, transform 0.2s;
+  color: #e2e8f0;
+  letter-spacing: 0.02em;
 }
-.login-button:hover { opacity: 0.88; transform: scale(1.03); }
 
-/* ── Hero (snow area with centred headline) ───────────── */
-.hero-section {
-  position: relative;
-  width: 100%;
-  height: 100vh;
+.user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(135deg, #3b82f6, #1e3a8a);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  font-size: 1.1rem;
+}
+
+
+.hero-section {
+  height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 10;
   text-align: center;
-  gap: 16px;
-  padding: 0 24px;
+  padding: 0 20px;
+  background:
+    linear-gradient(to bottom,
+      rgba(2, 4, 17, 0) 0%,
+      rgba(2, 4, 17, 0) 50%,
+      rgba(2, 4, 17, 0.4) 80%,
+      rgba(2, 4, 17, 1) 100%),
+    url('/images/Gemini_Generated_Image_8s7vhq8s7vhq8s7v.png');
+  background-size: cover;
+  background-position: center;
+  /* Use mask to create a perfectly feathered edge at the bottom */
+  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
 }
 
 .hero-section h2 {
-  font-size: clamp(2.2rem, 6vw, 4.2rem);
+  font-size: clamp(2rem, 5vw, 3.8rem);
+  /* Slightly reduced for better proportions */
   font-weight: 800;
-  color: #ffffff;
-  text-shadow: 0 0 40px rgba(100,160,255,0.6);
-  letter-spacing: 0.01em;
-  line-height: 1.15;
+  background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 50%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.02em;
+  /* Tighter for a modern look */
+  line-height: 1.1;
+  margin-bottom: 28px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
 }
 
 .hero-section p {
-  font-size: clamp(1rem, 2.2vw, 1.25rem);
-  color: #93b8e0;
-  max-width: 580px;
-  line-height: 1.7;
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
+  color: #ffffff;
+  /* Pure high-contrast white */
+  max-width: 600px;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+  /* Slightly bolder for better legibility */
+  text-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.8),
+    0 0 4px rgba(0, 0, 0, 0.5);
+  /* Stronger shadow for separation on busy image */
+  margin-top: 15px;
 }
 
 .hero-section .scroll-hint {
   margin-top: 24px;
   font-size: 0.85rem;
-  color: #5a80aa;
+  color: #ffffff;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   animation: bounce 1.8s ease-in-out infinite;
 }
+
 @keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(8px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(8px);
+  }
 }
 
 /* ── Scrollable content below hero ───────────────────── */
@@ -128,7 +274,10 @@ body {
   backdrop-filter: blur(12px);
   transition: border-color 0.25s;
 }
-.content-section:hover { border-color: rgba(100, 170, 255, 0.4); }
+
+.content-section:hover {
+  border-color: rgba(100, 170, 255, 0.4);
+}
 
 .content-section h2 {
   font-size: 1.5rem;
@@ -167,8 +316,13 @@ body {
 }
 
 @keyframes scroll-left {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 /* ── Footer ───────────────────────────────────────────── */
@@ -211,4 +365,9 @@ body {
   transform: scale(1.12);
 }
 
-.social-links img { width: 22px; height: 22px; object-fit: contain; filter: brightness(1.4); }
+.social-links img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  filter: brightness(1.4);
+}

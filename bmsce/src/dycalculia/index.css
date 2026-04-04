@@ -59,13 +59,7 @@ body {
   color: var(--text-h); /* Fallback or global set */
 }
 
-@keyframes bgAura {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-#root {
+.dycalculia-app {
   width: 1126px;
   max-width: 100%;
   margin: 0 auto;
@@ -76,6 +70,13 @@ body {
   flex-direction: column;
   box-sizing: border-box;
 }
+
+@keyframes bgAura {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 
 h1,
 h2 {
