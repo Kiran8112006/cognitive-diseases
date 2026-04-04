@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signup, login } from "./auth";
 import { auth } from "./firebase";
 import {
@@ -7,7 +7,6 @@ import {
     GoogleAuthProvider,
 } from "firebase/auth";
 import "./auth.css";
-import PixelSnow from "./PixelSnow";
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -15,66 +14,117 @@ export default function Auth() {
     const [tab, setTab] = useState("login");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
 
-    const clear = () => { setError(""); setSuccess(""); };
+    const [requirements, setRequirements] = useState({
+        length: false,
+        upper: false,
+        lower: false,
+        number: false,
+        special: false
+    });
+
+    useEffect(() => {
+        if (tab === "signup") {
+            setRequirements({
+                length: password.length >= 8,
+                upper: /[A-Z]/.test(password),
+                lower: /[a-z]/.test(password),
+                number: /[0-9]/.test(password),
+                special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+            });
+        }
+    }, [password, tab]);
+
+    const allRequirementsMet = Object.values(requirements).every(Boolean);
+    const passwordsMatch = password === confirmPassword;
+    const isSignupValid = allRequirementsMet && passwordsMatch && email;
+
+    const clear = () => { 
+        setError(""); 
+        setSuccess(""); 
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+    };
+
     const go = (t) => { setTab(t); clear(); };
     const isReset = tab === "reset";
 
+    const getFriendlyMessage = (error) => {
+        const code = error.code || error.message;
+        if (!code) return "An unexpected error occurred. Please try again.";
+
+        if (code.includes('auth/email-already-in-use')) return "This email is already registered. Try logging in.";
+        if (code.includes('auth/invalid-email')) return "Please enter a valid email address.";
+        if (code.includes('auth/weak-password')) return "Password is too weak. Please use a stronger one.";
+        if (code.includes('auth/user-not-found')) return "No account found with this email.";
+        if (code.includes('auth/wrong-password')) return "Incorrect password. Please try again.";
+        if (code.includes('auth/too-many-requests')) return "Too many failed attempts. Please try again later.";
+        if (code.includes('auth/popup-closed-by-user')) return null; // Ignore this one
+
+        return "Something went wrong. Please try again.";
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        clear();
+        setError(""); // Clear previous errors
+        setSuccess("");
         try {
-            if (tab === "signup") await signup(email, password);
+            if (tab === "signup") {
+                if (!isSignupValid) return;
+                await signup(email, password);
+            }
             else if (tab === "login") await login(email, password);
             else {
                 await sendPasswordResetEmail(auth, email);
                 setSuccess("✅ Reset link sent — check your inbox.");
             }
         } catch (err) {
-            setError(err.message || "Something went wrong. Try again.");
+            const msg = getFriendlyMessage(err);
+            if (msg) setError(msg);
         }
     };
 
     const handleGoogle = async () => {
-        clear();
+        setError("");
+        setSuccess("");
         try {
             await signInWithPopup(auth, googleProvider);
         } catch (err) {
-            if (err.code !== "auth/popup-closed-by-user") {
-                setError(err.message || "Google sign-in failed.");
-            }
+            const msg = getFriendlyMessage(err);
+            if (msg) setError(msg);
         }
     };
 
+    const RequirementItem = ({ met, label }) => (
+        <div className={`requirement-item ${met ? 'met' : ''}`}>
+            <span className="requirement-icon">{met ? '✓' : '×'}</span>
+            <span className="requirement-text">{label}</span>
+        </div>
+    );
+
     return (
         <>
-            <div className="snow-background" style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
-                <PixelSnow
-                    color="#a8d0ff"
-                    flakeSize={0.01}
-                    minFlakeSize={1.25}
-                    pixelResolution={200}
-                    speed={1.25}
-                    density={0.3}
-                    direction={125}
-                    brightness={1}
-                    depthFade={8}
-                    farPlane={20}
-                    gamma={0.4545}
-                    variant="square"
-                    style={{ width: '100%', height: '100%' }}
-                />
-            </div>
+            <div className="snow-background"></div>
             <div className="auth-page">
                 <div className="auth-card">
 
                 <div className="auth-brand">
-                    <div className="auth-logo"><img src="https://static.vecteezy.com/system/resources/thumbnails/033/539/545/small/functioning-of-the-human-body-and-the-brain-transparent-background-png.png" style={{ width: "135px", height: "135px" }} alt="cognitive" /></div>
-                    <h1 className="auth-title">DDAP</h1>
-                    <p className="auth-subtitle">
-                        {isReset ? "Reset your password" : "Cognitive Health Platform"}
+                    <div className="brand-header">
+                        <svg className="nav-logo-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-1.54Z" />
+                            <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-1.54Z" />
+                        </svg>
+                        <span className="brand-name">DDAP</span>
+                    </div>
+                    <h2 className="auth-heading">
+                        {tab === "login" ? "Welcome Back" : tab === "signup" ? "Create Your Account" : "Reset Password"}
+                    </h2>
+                    <p className="auth-description">
+                        {isReset ? "Instructions will be sent to your email" : "Join us and start your story"}
                     </p>
                 </div>
 
@@ -119,20 +169,47 @@ export default function Auth() {
                         />
                     </div>
 
-                    {!isReset && (
-                        <div className="auth-field">
-                            <label className="auth-label" htmlFor="auth-password">Password</label>
-                            <input
-                                id="auth-password"
-                                className="auth-input"
-                                type="password"
-                                placeholder="••••••••"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                                autoComplete={tab === "signup" ? "new-password" : "current-password"}
-                            />
-                        </div>
+                    <div className="auth-field">
+                        <label className="auth-label" htmlFor="auth-password">Password</label>
+                        <input
+                            id="auth-password"
+                            className="auth-input"
+                            type="password"
+                            placeholder="••••••••"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            autoComplete={tab === "signup" ? "new-password" : "current-password"}
+                        />
+                    </div>
+
+                    {tab === "signup" && (
+                        <>
+                            <div className="password-requirements">
+                                <p className="requirements-title">Password must meet all requirements:</p>
+                                <RequirementItem met={requirements.length} label="At least 8 characters long" />
+                                <RequirementItem met={requirements.upper} label="At least one uppercase letter" />
+                                <RequirementItem met={requirements.lower} label="At least one lowercase letter" />
+                                <RequirementItem met={requirements.number} label="At least one number" />
+                                <RequirementItem met={requirements.special} label="At least one special character" />
+                            </div>
+
+                            <div className="auth-field">
+                                <label className="auth-label" htmlFor="auth-confirm">Confirm Password</label>
+                                <input
+                                    id="auth-confirm"
+                                    className="auth-input"
+                                    type="password"
+                                    placeholder="••••••••"
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    required
+                                />
+                                {confirmPassword && !passwordsMatch && (
+                                    <span className="field-error">Passwords do not match</span>
+                                )}
+                            </div>
+                        </>
                     )}
 
                     {tab === "login" && (
@@ -148,7 +225,12 @@ export default function Auth() {
                         </div>
                     )}
 
-                    <button id="auth-submit" type="submit" className="auth-btn-primary">
+                    <button 
+                        id="auth-submit" 
+                        type="submit" 
+                        className="auth-btn-primary"
+                        disabled={tab === "signup" && !isSignupValid}
+                    >
                         {tab === "signup" ? "Create Account"
                             : tab === "reset" ? "Send Reset Link"
                                 : "Sign In"}
@@ -192,3 +274,4 @@ export default function Auth() {
         </>
     );
 }
+
