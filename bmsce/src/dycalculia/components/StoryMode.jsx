@@ -71,132 +71,61 @@ export default function StoryMode() {
     stopSpeech();
 
     try {
-      // Check if Ollama is running
-      const response = await fetch(`http://localhost:${ollamaPort}/api/tags`, {
-        method: "GET",
-      });
-
-      if (!response.ok) {
-        throw new Error("Ollama not responding");
-      }
-
-      // Get English language name
-      const englishLanguageName = languageNameMap[selectedLanguage] || "English";
-
       // Step 1: Generate story in English first
       const englishPrompt = `Explain the math problem "${mathExpression}" using real everyday examples. Use scenarios like sharing cookies, toys, or playing games. Make it relatable for a child. Keep it short (2-3 sentences). Only provide the explanation, nothing else.`;
 
-      // Try different models
-      const modelsToTry = ["llama3", "mistral", "neural-chat", "dolphin-mixtral"];
       let englishStory = null;
+      try {
+        const apiResponse = await fetch(`http://localhost:5000/generate_story`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt: englishPrompt }),
+        });
 
-      for (const model of modelsToTry) {
-        try {
-          const apiResponse = await fetch(
-            `http://localhost:${ollamaPort}/api/generate`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                model: model,
-                prompt: englishPrompt,
-                stream: false,
-                temperature: 0.7,
-                num_predict: 150,
-              }),
-            }
-          );
-
-          if (apiResponse.ok) {
-            const data = await apiResponse.json();
-            englishStory = data.response;
-            break;
-          }
-        } catch (err) {
-          continue;
+        if (apiResponse.ok) {
+          const data = await apiResponse.json();
+          englishStory = data.text;
         }
+      } catch (err) {
+        console.error("API error:", err);
       }
 
       if (!englishStory) {
-        throw new Error("Failed to generate story");
+        throw new Error("Failed to generate story with Gemini backend");
       }
 
       // Step 2: Translate to target language if not English
       let finalStory = englishStory;
 
       if (selectedLanguage !== "en-US") {
-        // Create translation prompt - be VERY specific about language
         const translationPrompts = {
-          "hi-IN": `Translate this English text to Hindi. Keep it simple and suitable for a child. Maintain the meaning exactly.
-
-English: "${englishStory}"
-
-Hindi translation (ONLY the translation, no explanations):`,
-
-          "ta-IN": `Translate this English text to Tamil. Keep it simple and suitable for a child. Maintain the meaning exactly.
-
-English: "${englishStory}"
-
-Tamil translation (ONLY the translation, no explanations):`,
-
-          "te-IN": `Translate this English text to Telugu. Keep it simple and suitable for a child. Maintain the meaning exactly.
-
-English: "${englishStory}"
-
-Telugu translation (ONLY the translation, no explanations):`,
-
-          "kn-IN": `Translate this English text to Kannada. Keep it simple and suitable for a child. Maintain the meaning exactly.
-
-English: "${englishStory}"
-
-Kannada translation (ONLY the translation, no explanations):`,
-
-          "bn-IN": `Translate this English text to Bengali. Keep it simple and suitable for a child. Maintain the meaning exactly.
-
-English: "${englishStory}"
-
-Bengali translation (ONLY the translation, no explanations):`,
-
-          "mr-IN": `Translate this English text to Marathi. Keep it simple and suitable for a child. Maintain the meaning exactly.
-
-English: "${englishStory}"
-
-Marathi translation (ONLY the translation, no explanations):`,
+          "hi-IN": `Translate this English text to Hindi. Keep it simple and suitable for a child. Maintain the meaning exactly.\n\nEnglish: "${englishStory}"\n\nHindi translation (ONLY the translation, no explanations):`,
+          "ta-IN": `Translate this English text to Tamil. Keep it simple and suitable for a child. Maintain the meaning exactly.\n\nEnglish: "${englishStory}"\n\nTamil translation (ONLY the translation, no explanations):`,
+          "te-IN": `Translate this English text to Telugu. Keep it simple and suitable for a child. Maintain the meaning exactly.\n\nEnglish: "${englishStory}"\n\nTelugu translation (ONLY the translation, no explanations):`,
+          "kn-IN": `Translate this English text to Kannada. Keep it simple and suitable for a child. Maintain the meaning exactly.\n\nEnglish: "${englishStory}"\n\nKannada translation (ONLY the translation, no explanations):`,
+          "bn-IN": `Translate this English text to Bengali. Keep it simple and suitable for a child. Maintain the meaning exactly.\n\nEnglish: "${englishStory}"\n\nBengali translation (ONLY the translation, no explanations):`,
+          "mr-IN": `Translate this English text to Marathi. Keep it simple and suitable for a child. Maintain the meaning exactly.\n\nEnglish: "${englishStory}"\n\nMarathi translation (ONLY the translation, no explanations):`,
         };
 
         const translationPrompt = translationPrompts[selectedLanguage];
 
         if (translationPrompt) {
-          // Try to translate with available model
-          for (const model of modelsToTry) {
-            try {
-              const translateResponse = await fetch(
-                `http://localhost:${ollamaPort}/api/generate`,
-                {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    model: model,
-                    prompt: translationPrompt,
-                    stream: false,
-                    temperature: 0.5, // Lower temperature for more accurate translation
-                    num_predict: 150,
-                  }),
-                }
-              );
+          try {
+            const translateResponse = await fetch(`http://localhost:5000/generate_story`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ prompt: translationPrompt }),
+            });
 
-              if (translateResponse.ok) {
-                const translatedData = await translateResponse.json();
-                const translated = translatedData.response.trim();
-                // Only use translation if it's not empty and doesn't contain unwanted text
-                if (translated && translated.length > 5) {
-                  finalStory = translated;
-                  break;
-                }
+            if (translateResponse.ok) {
+              const translatedData = await translateResponse.json();
+              const translated = (translatedData.text || "").trim();
+              if (translated && translated.length > 5) {
+                finalStory = translated;
               }
-            } catch (err) {
-              continue;
             }
+          } catch (err) {
+             console.error("Translation error:", err);
           }
         }
       }
@@ -210,7 +139,7 @@ Marathi translation (ONLY the translation, no explanations):`,
       }, 500);
     } catch (err) {
       setLoading(false);
-      setError("Could not generate story. Make sure Ollama is running.");
+      setError(err.message || "Could not generate story. Make sure backend is running.");
       console.error(err);
     }
   };

@@ -176,12 +176,26 @@ Make the student feel motivated and comfortable.
 
     try:
         genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-2.5-flash")
         response = model.generate_content(prompt)
         return jsonify({"text": response.text})
     except Exception as e:
         print(f"[ERROR] Gemini request failed: {e}")
         return jsonify({"text": "AI failed"})
+
+@app.route('/generate_story', methods=["POST"])
+def generate_story():
+    data = request.json
+    prompt = data.get("prompt", "")
+    
+    try:
+        genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
+        model = genai.GenerativeModel("gemini-2.5-flash")
+        response = model.generate_content(prompt)
+        return jsonify({"text": response.text})
+    except Exception as e:
+        print(f"[ERROR] Gemini generate_story failed: {e}")
+        return jsonify({"text": "Error generating story", "error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)
