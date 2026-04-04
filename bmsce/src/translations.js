@@ -5,7 +5,7 @@ export const translations = {
         subtitle: "Cognitive Diseases Awareness Platform",
         
         // Navigation
-        login: "Welcome",
+        login: "Login",
         exploreDisorders: "Select an option below to begin",
         
         // Hero Section
@@ -41,6 +41,7 @@ export const translations = {
         // Auth
         signin: "Sign In",
         signup: "Sign Up",
+        getStarted: "Get Started",
         logout: "Logout",
         
         // Hero Page
@@ -62,7 +63,7 @@ export const translations = {
         subtitle: "संज्ञानात्मक रोग जागरूकता मंच",
         
         // Navigation
-        login: "स्वागत है",
+        login: "लॉगिन",
         exploreDisorders: "शुरू करने के लिए नीचे विकल्प चुनें",
         
         // Hero Section
@@ -98,6 +99,7 @@ export const translations = {
         // Auth
         signin: "साइन इन करें",
         signup: "साइन अप करें",
+        getStarted: "शुरू करें",
         logout: "लॉगआउट",
         
         // Hero Page
@@ -119,7 +121,7 @@ export const translations = {
         subtitle: "அறிவாற்றல் நோய் விழிப்புணர்வு தளம்",
         
         // Navigation
-        login: "வரவேற்கிறோம்",
+        login: "உள்நுழைக",
         exploreDisorders: "தொடங்க கீழே ஒரு விருப்பத்தைத் தேர்ந்தெடுக்கவும்",
         
         // Hero Section
@@ -155,6 +157,7 @@ export const translations = {
         // Auth
         signin: "உள்நுழைக",
         signup: "பதிவு செய்க",
+        getStarted: "தொடங்குங்கள்",
         logout: "வெளியேறவும்",
         
         // Hero Page
@@ -176,7 +179,7 @@ export const translations = {
         subtitle: "అభిజ్ఞా వ్యాధుల అవగాహన ప్ల్యాట్‌ఫారమ్",
         
         // Navigation
-        login: "స్వాగతం",
+        login: "లాగిన్",
         exploreDisorders: "ప్రారంభించడానికి దిగువ ఎంపిక ఎంచుకోండి",
         
         // Hero Section
@@ -212,6 +215,7 @@ export const translations = {
         // Auth
         signin: "సైన్ ఇన్ చేయండి",
         signup: "సైన్ అప్ చేయండి",
+        getStarted: "ప్రారంభించండి",
         logout: "లాగ్ అవుట్",
         
         // Hero Page
@@ -233,7 +237,7 @@ export const translations = {
         subtitle: "ಅರಿವು ವ್ಯಾಧಿಗಳ ಜಾಗೃತಿ ವೇದಿ",
         
         // Navigation
-        login: "ಸ್ವಾಗತ",
+        login: "ಲಾಗ್ ಇನ್",
         exploreDisorders: "ಪ್ರಾರಂಭಿಸಲು ಕೆಳಗಿನ ಆಯ್ಕೆ ಆಯ್ಕೆ ಮಾಡಿ",
         
         // Hero Section
@@ -269,6 +273,7 @@ export const translations = {
         // Auth
         signin: "ಸೈನ್ ಇನ್ ಮಾಡಿ",
         signup: "ಸೈನ್ ಅಪ್ ಮಾಡಿ",
+        getStarted: "ಪ್ರಾರಂಭಿಸಿ",
         logout: "ಲಾಗ್ ಔಟ್",
         
         // Hero Page
@@ -290,7 +295,7 @@ export const translations = {
         subtitle: "জ্ঞানগত রোগ সচেতনতা প্ল্যাটফর্ম",
         
         // Navigation
-        login: "স্বাগতম",
+        login: "লগইন",
         exploreDisorders: "শুরু করার জন্য নীচে একটি বিকল্প নির্বাচন করুন",
         
         // Hero Section
@@ -326,6 +331,7 @@ export const translations = {
         // Auth
         signin: "সাইন ইন করুন",
         signup: "সাইন আপ করুন",
+        getStarted: "শুরু করুন",
         logout: "লগআউট",
         
         // Hero Page
@@ -347,7 +353,7 @@ export const translations = {
         subtitle: "संज्ञानात्मक रोग जागरूकता मंच",
         
         // Navigation
-        login: "स्वागत आहे",
+        login: "लॉगिन",
         exploreDisorders: "सुरू करण्यासाठी खाली एक पर्याय निवडा",
         
         // Hero Section
@@ -383,6 +389,7 @@ export const translations = {
         // Auth
         signin: "साइन इन करा",
         signup: "साइन अप करा",
+        getStarted: "सुरू करा",
         logout: "लॉगआउट",
         
         // Hero Page

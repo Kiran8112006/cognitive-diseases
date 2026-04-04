@@ -138,7 +138,7 @@ export default function SmartTest() {
                         >
                             🔁 Try Again
                         </button>
-                        <button onClick={() => navigate('/')} className="btn btn-secondary">
+                        <button onClick={() => navigate('/dycalculia', { replace: true })} className="btn btn-secondary">
                             🏠 Back to Home
                         </button>
                     </div>
