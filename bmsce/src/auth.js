@@ -2,7 +2,8 @@ import { auth } from "./firebase";
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
-    signOut
+    signOut,
+    updateProfile
 } from "firebase/auth";
 
 // Signup
