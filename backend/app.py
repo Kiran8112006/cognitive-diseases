@@ -16,7 +16,7 @@ from summary import summarize
 from mindmap import generate_mindmap
 
 from db import add_face, query_face
-import face_recognition
+from deepface import DeepFace
 import numpy as np
 from PIL import Image
 
@@ -218,13 +218,16 @@ def propognasia_enroll():
     try:
         img = Image.open(file).convert("RGB")
         img_array = np.array(img)
-        encodings = face_recognition.face_encodings(img_array)
+        results = DeepFace.represent(img_path=img_array, model_name="Facenet", enforce_detection=True)
         
-        if len(encodings) > 0:
-            add_face(name, encodings[0], namespace=namespace)
+        if len(results) > 0:
+            embedding = results[0]["embedding"]
+            add_face(name, embedding, namespace=namespace)
             return jsonify({"success": True, "message": f"Enrolled {name}"})
         else:
             return jsonify({"error": "No face detected"}), 400
+    except ValueError:
+        return jsonify({"error": "No face detected"}), 400
     except Exception as e:
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
@@ -243,18 +246,20 @@ def propognasia_identify():
     try:
         img = Image.open(file).convert("RGB")
         img_array = np.array(img)
-        face_locations = face_recognition.face_locations(img_array)
-        face_encodings = face_recognition.face_encodings(img_array, face_locations)
+        deepface_results = DeepFace.represent(img_path=img_array, model_name="Facenet", enforce_detection=True)
         
-        if len(face_encodings) == 0:
+        if len(deepface_results) == 0:
             return jsonify({"message": "No face detected", "matches": []})
             
-        results = []
-        for encoding in face_encodings:
+        matches = []
+        for face_data in deepface_results:
+            encoding = face_data["embedding"]
             person_name = query_face(encoding, namespace=namespace)
-            results.append(person_name)
+            matches.append(person_name)
             
-        return jsonify({"success": True, "matches": results})
+        return jsonify({"success": True, "matches": matches})
+    except ValueError:
+        return jsonify({"message": "No face detected", "matches": []})
     except Exception as e:
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500

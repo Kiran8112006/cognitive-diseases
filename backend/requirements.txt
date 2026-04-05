@@ -7,6 +7,5 @@ pyphen
 google-generativeai
 requests
 pinecone
-face_recognition
-git+https://github.com/ageitgey/face_recognition_models
-setuptools<70
+deepface
+tf-keras
