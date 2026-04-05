@@ -1,4 +1,12 @@
 import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+
+import tensorflow as tf
+
+cpus = tf.config.list_physical_devices('CPU')
+tf.config.set_visible_devices(cpus)
+
+from deepface import DeepFace
 import requests
 import traceback
 from flask import Flask, request, jsonify
@@ -16,7 +24,6 @@ from summary import summarize
 from mindmap import generate_mindmap
 
 from db import add_face, query_face
-from deepface import DeepFace
 import numpy as np
 from PIL import Image
 
@@ -265,4 +272,4 @@ def propognasia_identify():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0')
