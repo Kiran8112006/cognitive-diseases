@@ -54,7 +54,7 @@ export default function Home() {
 
             <main className="dy-container">
                 <header className="dy-header">
-                    <h1 className="dy-title">{t("dyscalculiaMode")}</h1>
+                    <h1 className="dy-title">{t("Dyscalculia Mode")}</h1>
                 </header>
 
                 {/* Tests Carousel */}
