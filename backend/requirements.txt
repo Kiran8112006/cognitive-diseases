@@ -9,3 +9,4 @@ requests
 pinecone
 deepface
 tf-keras
+gunicorn
