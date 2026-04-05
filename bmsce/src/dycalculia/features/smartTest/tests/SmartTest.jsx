@@ -45,7 +45,7 @@ export default function SmartTest() {
         setResult(analysis)
 
         try {
-            const res = await fetch("http://localhost:5000/summary", {
+            const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/summary`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

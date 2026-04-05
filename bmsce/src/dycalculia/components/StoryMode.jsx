@@ -77,7 +77,7 @@ export default function StoryMode({ onBack }) {
 
       let englishStory = null;
       try {
-        const apiResponse = await fetch(`http://localhost:5000/generate_story`, {
+        const apiResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/generate_story`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ prompt: englishPrompt }),
@@ -112,7 +112,7 @@ export default function StoryMode({ onBack }) {
 
         if (translationPrompt) {
           try {
-            const translateResponse = await fetch(`http://localhost:5000/generate_story`, {
+            const translateResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/generate_story`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ prompt: translationPrompt }),

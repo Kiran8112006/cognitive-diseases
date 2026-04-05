@@ -45,7 +45,7 @@ export default function PdfUpload() {
         formData.append("file", file);
 
         try {
-            const res = await fetch("http://127.0.0.1:5000/upload_pdf", {
+            const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/upload_pdf`, {
                 method: "POST",
                 body: formData,
             });

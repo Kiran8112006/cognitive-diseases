@@ -21,7 +21,8 @@ import numpy as np
 from PIL import Image
 
 app = Flask(__name__)
-CORS(app)
+frontend_url = os.environ.get("FRONTEND_URL", "*")
+CORS(app, origins=frontend_url)
 
 # Configure upload folder
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads')

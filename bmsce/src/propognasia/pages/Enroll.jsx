@@ -59,7 +59,7 @@ const Enroll = () => {
             formData.append("name", name);
             formData.append("userId", user.uid);
             
-            const res = await fetch("http://127.0.0.1:5000/propognasia/enroll", {
+            const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/propognasia/enroll`, {
                 method: "POST",
                 body: formData
             });
