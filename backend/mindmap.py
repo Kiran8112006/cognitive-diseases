@@ -3,7 +3,7 @@ import re
 import urllib.parse
 from groq import Groq
 from dotenv import load_dotenv
-import google.generativeai as genai
+
 
 # Load environment variables
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')

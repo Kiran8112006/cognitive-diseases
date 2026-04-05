@@ -4,9 +4,10 @@ groq
 python-dotenv
 pypdf
 pyphen
-google-generativeai
+google-genai
 requests
 pinecone
+tensorflow-cpu
 deepface
 tf-keras
 gunicorn

@@ -13,7 +13,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
-import google.generativeai as genai
+from google import genai
 
 # Load environment variables early
 load_dotenv()
@@ -188,9 +188,11 @@ Make the student feel motivated and comfortable.
 """
 
     try:
-        genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
-        model = genai.GenerativeModel("gemini-2.5-flash")
-        response = model.generate_content(prompt)
+        client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt,
+        )
         return jsonify({"text": response.text})
     except Exception as e:
         print(f"[ERROR] Gemini request failed: {e}")
@@ -202,9 +204,11 @@ def generate_story():
     prompt = data.get("prompt", "")
     
     try:
-        genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
-        model = genai.GenerativeModel("gemini-2.5-flash")
-        response = model.generate_content(prompt)
+        client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt,
+        )
         return jsonify({"text": response.text})
     except Exception as e:
         print(f"[ERROR] Gemini generate_story failed: {e}")
@@ -225,7 +229,12 @@ def propognasia_enroll():
     try:
         img = Image.open(file).convert("RGB")
         img_array = np.array(img)
-        results = DeepFace.represent(img_path=img_array, model_name="Facenet", enforce_detection=True)
+        results = DeepFace.represent(
+            img_path=img_array,
+            model_name = "SFace", 
+            detector_backend = "opencv",
+            enforce_detection=True
+        )
         
         if len(results) > 0:
             embedding = results[0]["embedding"]
@@ -253,7 +262,12 @@ def propognasia_identify():
     try:
         img = Image.open(file).convert("RGB")
         img_array = np.array(img)
-        deepface_results = DeepFace.represent(img_path=img_array, model_name="Facenet", enforce_detection=True)
+        deepface_results = DeepFace.represent(
+            img_path=img_array, 
+            model_name = "SFace", 
+            detector_backend = "opencv",
+            enforce_detection=True
+        )
         
         if len(deepface_results) == 0:
             return jsonify({"message": "No face detected", "matches": []})
