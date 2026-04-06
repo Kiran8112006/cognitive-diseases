@@ -1,12 +1,7 @@
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
-
-import tensorflow as tf
-
-cpus = tf.config.list_physical_devices('CPU')
-tf.config.set_visible_devices(cpus)
-
-from deepface import DeepFace
+import cv2
+import numpy as np
+from face import DeepFace as ONNXDeepFace
 import requests
 import traceback
 from flask import Flask, request, jsonify
@@ -24,8 +19,37 @@ from summary import summarize
 from mindmap import generate_mindmap
 
 from db import add_face, query_face
-import numpy as np
 from PIL import Image
+
+# Load ONNX face-embedding model once at startup (facenet128 → 128-dim vectors)
+_FACE_MODEL_NAME = "facenet128"
+_face_model = ONNXDeepFace(model_name=_FACE_MODEL_NAME)
+
+# OpenCV face detector (same Haar cascade used by DeepFace's 'opencv' backend)
+_face_cascade = cv2.CascadeClassifier(
+    cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+)
+
+def _detect_and_embed(img_array: np.ndarray) -> list[list[float]]:
+    """
+    Detect faces in img_array (H×W×3 RGB uint8) using OpenCV Haar cascade,
+    crop each face, and return a list of embedding vectors via the ONNX model.
+    Raises ValueError if no face is found.
+    """
+    gray = cv2.cvtColor(img_array, cv2.COLOR_RGB2GRAY)
+    faces = _face_cascade.detectMultiScale(
+        gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30)
+    )
+    if len(faces) == 0:
+        raise ValueError("No face detected")
+
+    embeddings = []
+    for (x, y, w, h) in faces:
+        face_crop = img_array[y:y+h, x:x+w]  # RGB crop
+        face_bgr = cv2.cvtColor(face_crop, cv2.COLOR_RGB2BGR)
+        embedding = _face_model.predict(face_bgr)[0][0].tolist()
+        embeddings.append(embedding)
+    return embeddings
 
 app = Flask(__name__)
 frontend_url = os.environ.get("FRONTEND_URL", "*")
@@ -229,19 +253,10 @@ def propognasia_enroll():
     try:
         img = Image.open(file).convert("RGB")
         img_array = np.array(img)
-        results = DeepFace.represent(
-            img_path=img_array,
-            model_name = "SFace", 
-            detector_backend = "opencv",
-            enforce_detection=True
-        )
-        
-        if len(results) > 0:
-            embedding = results[0]["embedding"]
-            add_face(name, embedding, namespace=namespace)
-            return jsonify({"success": True, "message": f"Enrolled {name}"})
-        else:
-            return jsonify({"error": "No face detected"}), 400
+        embeddings = _detect_and_embed(img_array)
+        embedding = embeddings[0]  # enroll the first detected face
+        add_face(name, embedding, namespace=namespace)
+        return jsonify({"success": True, "message": f"Enrolled {name}"})
     except ValueError:
         return jsonify({"error": "No face detected"}), 400
     except Exception as e:
@@ -262,22 +277,13 @@ def propognasia_identify():
     try:
         img = Image.open(file).convert("RGB")
         img_array = np.array(img)
-        deepface_results = DeepFace.represent(
-            img_path=img_array, 
-            model_name = "SFace", 
-            detector_backend = "opencv",
-            enforce_detection=True
-        )
-        
-        if len(deepface_results) == 0:
-            return jsonify({"message": "No face detected", "matches": []})
-            
+        embeddings = _detect_and_embed(img_array)
+
         matches = []
-        for face_data in deepface_results:
-            encoding = face_data["embedding"]
-            person_name = query_face(encoding, namespace=namespace)
+        for embedding in embeddings:
+            person_name = query_face(embedding, namespace=namespace)
             matches.append(person_name)
-            
+
         return jsonify({"success": True, "matches": matches})
     except ValueError:
         return jsonify({"message": "No face detected", "matches": []})
