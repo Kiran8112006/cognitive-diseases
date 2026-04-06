@@ -5,6 +5,12 @@ import { auth } from "../../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../../LanguageContext";
+import { 
+    UserRoundPlus, 
+    ScanFace, 
+    ChevronLeft, 
+    ChevronRight 
+} from "lucide-react";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -18,14 +24,14 @@ const Home = () => {
         {
             id: 'enroll',
             title: "Enroll Face",
-            icon: "https://cdn-icons-png.flaticon.com/512/3034/3034057.png",
+            icon: UserRoundPlus,
             path: "/enroll",
             description: "Register a new face to your personal database."
         },
         {
             id: 'identify',
             title: "Identify Faces",
-            icon: "https://cdn-icons-png.flaticon.com/512/4680/4680072.png",
+            icon: ScanFace,
             path: "/identify",
             description: "Scan an image to recognize previously saved faces."
         }
@@ -52,7 +58,9 @@ const Home = () => {
                 </header>
 
                 <div className="dys-carousel-container">
-                    <button onClick={prevSlide} className="dys-arrow-btn">❮</button>
+                    <button onClick={prevSlide} className="dys-arrow-btn">
+                        <ChevronLeft size={32} />
+                    </button>
 
                     <div className="dys-carousel-viewport">
                         <AnimatePresence mode="wait">
@@ -65,18 +73,19 @@ const Home = () => {
                                 className="dys-carousel-frame"
                                 onClick={() => navigate("/propognasia" + carouselItems[carouselIndex].path)}
                             >
-                                <img
-                                    src={carouselItems[carouselIndex].icon}
-                                    alt=""
-                                    className="dys-icon-image"
-                                />
+                                {(() => {
+                                    const IconComp = carouselItems[carouselIndex].icon;
+                                    return <IconComp size={80} className="dys-icon-lucide" color="#3b82f6" strokeWidth={1.5} />;
+                                })()}
                                 <h2 className="dys-carousel-title">{carouselItems[carouselIndex].title}</h2>
                                 <p className="dys-carousel-desc">{carouselItems[carouselIndex].description}</p>
                             </motion.div>
                         </AnimatePresence>
                     </div>
 
-                    <button onClick={nextSlide} className="dys-arrow-btn">❯</button>
+                    <button onClick={nextSlide} className="dys-arrow-btn">
+                        <ChevronRight size={32} />
+                    </button>
                 </div>
 
                 <div className="dys-indicators">

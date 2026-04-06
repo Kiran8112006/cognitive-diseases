@@ -2,6 +2,7 @@
 :root {
   /* Default base font size for the application */
   font-size: 16px; 
+  scroll-behavior: smooth;
 }
 
 @media (min-width: 1024px) {
@@ -22,4 +23,35 @@ body {
 /* Ensure all elements inherit box-sizing */
 *, *::before, *::after {
   box-sizing: inherit;
+}
+
+/* ── Custom App Scrollbar ── */
+/* Base scrollbar styling for Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #020411; /* Use the exact background color from landing.css */
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(37, 99, 235, 0.2); /* Matching the #2563eb blue with transparency */
+  border-radius: 100px;
+  border: 3px solid #020411; /* Creates a 'floating' thumb effect against the track */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(37, 99, 235, 0.45); /* More visible on hover */
+}
+
+::-webkit-scrollbar-corner {
+  background: #020411;
+}
+
+/* Standard scrollbar styling for Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(37, 99, 235, 0.3) #020411;
 }

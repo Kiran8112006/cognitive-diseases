@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import "./hero.css";
 import { useLanguage } from "./LanguageContext";
 import { getTranslation } from "./translations";
+import { LayoutGrid, BookOpen, ScanFace } from "lucide-react";
 
 export default function Hero({ user }) {
     const navigate = useNavigate();
@@ -24,16 +25,7 @@ export default function Hero({ user }) {
                     {/* Dyscalculia Card */}
                     <div className="dash-mode-card">
                         <div className="mode-icon-container dyscalculia-glow">
-                            <svg className="mode-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <rect x="3" y="3" width="7" height="7" rx="1" />
-                                <rect x="14" y="3" width="7" height="7" rx="1" />
-                                <rect x="3" y="14" width="7" height="7" rx="1" />
-                                <rect x="14" y="14" width="7" height="7" rx="1" />
-                                <text x="5" y="8" fontSize="4" fill="currentColor" stroke="none" fontWeight="bold">1</text>
-                                <text x="16" y="8" fontSize="4" fill="currentColor" stroke="none" fontWeight="bold">2</text>
-                                <text x="5" y="19" fontSize="4" fill="currentColor" stroke="none" fontWeight="bold">3</text>
-                                <text x="16" y="19" fontSize="4" fill="currentColor" stroke="none" fontWeight="bold">4</text>
-                            </svg>
+                            <LayoutGrid className="mode-icon" size={80} strokeWidth={1.5} />
                         </div>
                         <h2 className="mode-name">{t("dyscalculia")}</h2>
                         <p className="mode-desc">{t("dyscalculiaDesc")}</p>
@@ -48,14 +40,7 @@ export default function Hero({ user }) {
                     {/* Dyslexia Card */}
                     <div className="dash-mode-card">
                         <div className="mode-icon-container dyslexia-glow">
-                            <svg className="mode-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-                                <path d="M12 6l-1 2 2-1-1 2" fill="currentColor" stroke="none" transform="translate(-3, -2) scale(0.8)"/>
-                                <text x="10" y="10" fontSize="5" fill="currentColor" stroke="none" fontWeight="bold">A</text>
-                                <text x="15" y="7" fontSize="4" fill="currentColor" stroke="none" fontWeight="bold">B</text>
-                                <text x="13" y="15" fontSize="4" fill="currentColor" stroke="none" fontWeight="bold">C</text>
-                            </svg>
+                            <BookOpen className="mode-icon" size={80} strokeWidth={1.5} />
                         </div>
                         <h2 className="mode-name">{t("dyslexia")}</h2>
                         <p className="mode-desc">{t("dyslexiaDesc")}</p>
@@ -70,11 +55,7 @@ export default function Hero({ user }) {
                     {/* Prosopagnosia Card */}
                     <div className="dash-mode-card">
                         <div className="mode-icon-container dyslexia-glow">
-                            <svg className="mode-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                <circle cx="12" cy="8" r="5" />
-                                <path d="M20 21a8 8 0 0 0-16 0" />
-                                <path d="M8 14s1.5 2 4 2 4-2 4-2" />
-                            </svg>
+                            <ScanFace className="mode-icon" size={80} strokeWidth={1.5} />
                         </div>
                         <h2 className="mode-name">Prosopagnosia</h2>
                         <p className="mode-desc">Face recognition and memory assistance tools to help identify individuals.</p>

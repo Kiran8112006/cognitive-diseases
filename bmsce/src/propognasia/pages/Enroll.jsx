@@ -4,6 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import "../../dyslexia/pages/dyslexia.css";
+import { 
+    Camera, 
+    RefreshCw, 
+    Save, 
+    ArrowLeft 
+} from "lucide-react";
 
 function dataURItoBlob(dataURI) {
     const byteString = atob(dataURI.split(',')[1]);
@@ -82,6 +88,16 @@ const Enroll = () => {
             <div className="snow-background"></div>
 
             <main className="dys-main" style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
+                    <button 
+                        onClick={() => navigate('/propognasia')} 
+                        className="dys-arrow-btn" 
+                        style={{ width: 'auto', padding: '10px 20px', borderRadius: '12px', fontSize: '1rem', display: 'flex', gap: '8px' }}
+                    >
+                        <ArrowLeft size={20} /> Back
+                    </button>
+                </div>
+
                 <h1 className="dys-title">Enroll Face</h1>
                 
                 <div className="webcam-container">
@@ -100,9 +116,13 @@ const Enroll = () => {
                 
                 <div style={{display: 'flex', gap: '10px', marginBottom: '20px'}}>
                     {!imgSrc ? (
-                        <button className="dys-btn-primary" onClick={capture}>Capture Photo</button>
+                        <button className="dys-btn-primary" onClick={capture} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                            <Camera size={20} /> Capture Photo
+                        </button>
                     ) : (
-                        <button className="dys-btn-primary" onClick={() => setImgSrc(null)}>Retake</button>
+                        <button className="dys-btn-primary" onClick={() => setImgSrc(null)} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                            <RefreshCw size={20} /> Retake
+                        </button>
                     )}
                 </div>
 
@@ -114,7 +134,14 @@ const Enroll = () => {
                         onChange={(e) => setName(e.target.value)}
                         className="dys-input"
                     />
-                    <button className="dys-btn-primary" onClick={handleEnroll} disabled={!imgSrc}>Save Face</button>
+                    <button 
+                        className="dys-btn-primary" 
+                        onClick={handleEnroll} 
+                        disabled={!imgSrc}
+                        style={{ display: 'flex', gap: '8px', alignItems: 'center' }}
+                    >
+                        <Save size={20} /> Save Face
+                    </button>
                 </div>
                 
                 {status && <p className="dys-status-msg">{status}</p>}

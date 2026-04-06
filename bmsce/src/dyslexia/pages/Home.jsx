@@ -4,10 +4,21 @@ import { useNavigate } from "react-router-dom";
 import { auth, db } from "@/firebase";
 import { collection, query, orderBy, where, onSnapshot } from "firebase/firestore";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { motion, AnimatePresence } from "framer-motion";
+import { 
+    motion, 
+    AnimatePresence 
+} from "framer-motion";
 import { useLanguage } from "@/LanguageContext";
 import { getTranslation, languages } from "@/translations";
 import { logout } from "../../auth";
+import { 
+    Mic, 
+    FileAudio, 
+    FileText, 
+    History, 
+    ChevronLeft, 
+    ChevronRight 
+} from "lucide-react";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -24,24 +35,24 @@ const Home = () => {
         {
             id: 'live',
             title: t("liveTranscription"),
-            icon: "https://png.pngtree.com/png-vector/20250319/ourmid/pngtree-a-high-quality-studio-microphone-ensuring-excellent-sound-quality-for-vocal-png-image_15749730.png",
-            iconType: 'image',
+            icon: Mic,
+            iconType: 'lucide',
             path: "/live",
             description: t("realTimeSpeechToText")
         },
         {
             id: 'mp3',
             title: t("uploadMp3"),
-            icon: "https://www.freeiconspng.com/uploads/file-mp3-music-music-file-song-icon-27.png",
-            iconType: 'image',
+            icon: FileAudio,
+            iconType: 'lucide',
             path: "/upload",
             description: t("analyzeAudioFiles")
         },
         {
             id: 'pdf',
             title: t("uploadPdf"),
-            icon: "https://cdn-icons-png.flaticon.com/256/337/337946.png",
-            iconType: 'image',
+            icon: FileText,
+            iconType: 'lucide',
             path: "/pdf-upload",
             description: t("extractTextFromDocs")
         }
@@ -132,7 +143,9 @@ const Home = () => {
                 </header>
 
                 <div className="dys-carousel-container">
-                    <button onClick={prevSlide} className="dys-arrow-btn">❮</button>
+                    <button onClick={prevSlide} className="dys-arrow-btn">
+                        <ChevronLeft size={32} />
+                    </button>
 
                     <div className="dys-carousel-viewport">
                         <AnimatePresence mode="wait">
@@ -145,18 +158,27 @@ const Home = () => {
                                 className="dys-carousel-frame"
                                 onClick={() => navigate("/dyslexia" + carouselItems[carouselIndex].path)}
                             >
-                                <img
-                                    src={carouselItems[carouselIndex].icon}
-                                    alt=""
-                                    className="dys-icon-image"
-                                />
+                                {carouselItems[carouselIndex].iconType === 'lucide' ? (
+                                    (() => {
+                                        const IconComp = carouselItems[carouselIndex].icon;
+                                        return <IconComp size={80} className="dys-icon-lucide" color="#3b82f6" strokeWidth={1.5} />;
+                                    })()
+                                ) : (
+                                    <img
+                                        src={carouselItems[carouselIndex].icon}
+                                        alt=""
+                                        className="dys-icon-image"
+                                    />
+                                )}
                                 <h2 className="dys-carousel-title">{carouselItems[carouselIndex].title}</h2>
                                 <p className="dys-carousel-desc">{carouselItems[carouselIndex].description}</p>
                             </motion.div>
                         </AnimatePresence>
                     </div>
 
-                    <button onClick={nextSlide} className="dys-arrow-btn">❯</button>
+                    <button onClick={nextSlide} className="dys-arrow-btn">
+                        <ChevronRight size={32} />
+                    </button>
                 </div>
 
                 <div className="dys-indicators">
@@ -170,8 +192,12 @@ const Home = () => {
 
                 <div className="records-section">
                     <div className="section-header">
-                        <h2 className="section-title">📚 {t("previousRecords")}</h2>
+                        <h2 className="section-title">
+                            <History className="section-icon" size={24} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
+                            {t("previousRecords")}
+                        </h2>
                     </div>
+
 
                     {authLoading ? (
                         <div className="status-box"><p>{t("checkingAuth")}</p></div>

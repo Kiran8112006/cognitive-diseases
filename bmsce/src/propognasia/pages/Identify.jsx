@@ -4,6 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import "../../dyslexia/pages/dyslexia.css";
+import { 
+    Scan, 
+    RefreshCw, 
+    User as UserIcon, 
+    ArrowLeft 
+} from "lucide-react";
 
 function dataURItoBlob(dataURI) {
     const byteString = atob(dataURI.split(',')[1]);
@@ -78,6 +84,16 @@ const Identify = () => {
             <div className="snow-background"></div>
 
             <main className="dys-main" style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
+                    <button 
+                        onClick={() => navigate('/propognasia')} 
+                        className="dys-arrow-btn" 
+                        style={{ width: 'auto', padding: '10px 20px', borderRadius: '12px', fontSize: '1rem', display: 'flex', gap: '8px' }}
+                    >
+                        <ArrowLeft size={20} /> Back
+                    </button>
+                </div>
+
                 <h1 className="dys-title">Identify Face</h1>
                 
                 <div className="webcam-container">
@@ -96,9 +112,17 @@ const Identify = () => {
                 
                 <div style={{display: 'flex', gap: '10px', marginBottom: '20px'}}>
                     {!imgSrc ? (
-                        <button className="dys-btn-primary" onClick={capture}>Scan Person</button>
+                        <button className="dys-btn-primary" onClick={capture} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                            <Scan size={20} /> Scan Person
+                        </button>
                     ) : (
-                        <button className="dys-btn-primary" onClick={() => { setImgSrc(null); setResults([]); setStatus(""); }}>Scan Again</button>
+                        <button 
+                            className="dys-btn-primary" 
+                            onClick={() => { setImgSrc(null); setResults([]); setStatus(""); }}
+                            style={{ display: 'flex', gap: '8px', alignItems: 'center' }}
+                        >
+                            <RefreshCw size={20} /> Scan Again
+                        </button>
                     )}
                 </div>
 
@@ -108,8 +132,8 @@ const Identify = () => {
                     <div className="dys-result-box">
                         <h3 className="dys-result-title">Recognition Results</h3>
                         {results.map((name, i) => (
-                            <div key={i} className="dys-result-item">
-                                👤 {name}
+                            <div key={i} className="dys-result-item" style={{ display: 'flex', gap: '10px', alignItems: 'center', justifyContent: 'center' }}>
+                                <UserIcon size={20} color="#4ade80" /> {name}
                             </div>
                         ))}
                     </div>

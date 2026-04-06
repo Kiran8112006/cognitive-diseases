@@ -2,6 +2,7 @@ import './landing.css';
 import { useLanguage } from './LanguageContext';
 import { getTranslation, languages } from './translations';
 import { useNavigate } from 'react-router-dom';
+import { Brain, User } from 'lucide-react';
 
 const dyslexiaImages = [
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_3wys4e1z3zHSjP0Zfs0Oik-lJycvN5HZzA&s',
@@ -54,10 +55,7 @@ export default function Landing({ user }) {
                 {/* ── Navigation ── */}
                 <header className="landing-header">
                     <div className="nav-logo" onClick={() => navigate('/')}>
-                        <svg className="nav-logo-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-1.54Z" />
-                            <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-1.54Z" />
-                        </svg>
+                        <Brain className="nav-logo-icon" size={28} color="#2563eb" strokeWidth={2.5} />
                         <span className="nav-logo-text">{t("ddap")}</span>
                     </div>
 
@@ -84,11 +82,14 @@ export default function Landing({ user }) {
                                     {user.photoURL ? (
                                         <img src={user.photoURL} alt="User" />
                                     ) : (
-                                        <span className="avatar-placeholder">👤</span>
+                                        <span className="avatar-placeholder">
+                                            <User size={20} color="currentColor" />
+                                        </span>
                                     )}
                                 </div>
                             </div>
                         ) : (
+
                             <div className="guest-actions">
                                 <button className="nav-get-started" onClick={() => navigate('/auth')}>
                                     {t("getStarted")}

@@ -8,6 +8,17 @@ import "../../../pages/dyscalculia.css"
 import { useLanguage } from "@/LanguageContext"
 import { languages } from "@/translations"
 import { Link } from "react-router-dom"
+import { 
+    Star, 
+    Sparkles, 
+    Target, 
+    Timer, 
+    Brain, 
+    Lightbulb, 
+    Check, 
+    RefreshCw, 
+    Home as HomeIcon 
+} from "lucide-react";
 
 export default function SmartTest() {
     const { testType } = useParams()
@@ -58,6 +69,8 @@ export default function SmartTest() {
             return t("needsPractice");
         };
 
+        const LevelIcon = result.level === "strong" ? Star : result.level === "medium" ? Sparkles : Target;
+
         return (
             <div className="dycalculia-wrapper">
                 <div className="snow-background"></div>
@@ -70,7 +83,7 @@ export default function SmartTest() {
 
                         <div className="dy-performance-badge" style={{ borderLeft: `6px solid ${getLevelColor(result.level)}` }}>
                             <div className="dy-level-circle" style={{ backgroundColor: `${getLevelColor(result.level)}20`, color: getLevelColor(result.level) }}>
-                                {result.level === "strong" ? "⭐" : result.level === "medium" ? "✨" : "🎯"}
+                                <LevelIcon size={24} fill="currentColor" fillOpacity={0.2} />
                             </div>
                             <div>
                                 <h4 style={{ margin: 0, fontSize: '1.25rem', color: getLevelColor(result.level) }}>{getLevelLabel(result.level)}</h4>
@@ -80,24 +93,30 @@ export default function SmartTest() {
 
                         <div className="dy-stat-grid">
                             <div className="dy-stat-box">
-                                <span style={{ display: 'block', color: 'rgba(255,255,255,0.5)', fontSize: '0.85rem', marginBottom: '8px' }}>⏱️ {t("processingSpeed")}</span>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'rgba(255,255,255,0.5)', fontSize: '0.85rem', marginBottom: '8px' }}>
+                                    <Timer size={16} /> {t("processingSpeed")}
+                                </span>
                                 <span style={{ fontSize: '1.5rem', fontWeight: '800', color: '#3b82f6' }}>{result.speed}</span>
                             </div>
                         </div>
 
                         <div className="dy-insight-panel">
-                            <h3><span style={{ fontSize: '1.4rem' }}>🧠</span> {t("aiInsight")}</h3>
+                            <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <Brain size={24} color="#3b82f6" /> {t("aiInsight")}
+                            </h3>
                             <p>{summary || t("analyzingPatterns")}</p>
                         </div>
 
                         <div style={{ marginTop: '40px' }}>
-                            <h3 style={{ fontSize: '1.1rem', marginBottom: '20px' }}>💡 {t("personalizedRecommendations")}</h3>
+                            <h3 style={{ fontSize: '1.1rem', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <Lightbulb size={20} color="#f59e0b" /> {t("personalizedRecommendations")}
+                            </h3>
                             <div style={{ display: 'grid', gap: '12px' }}>
                                 {(result.level === "weak" ? ["Use visual blocks for numbers", "Break problems into small steps", "Practice estimating quantities"] :
                                   result.level === "medium" ? ["Practice quick mental math", "Try number line exercises", "Increase speed gradually"] :
                                   ["Challenge with harder problems", "Try multi-step calculations", "Improve speed further"]).map((rec, i) => (
-                                    <div key={i} style={{ padding: '16px', background: 'rgba(255,255,255,0.03)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', gap: '12px' }}>
-                                        <span style={{ color: '#10b981' }}>✓</span> {rec}
+                                    <div key={i} style={{ padding: '16px', background: 'rgba(255,255,255,0.03)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', gap: '12px', alignItems: 'center' }}>
+                                        <Check size={18} color="#10b981" /> {rec}
                                     </div>
                                   ))}
                             </div>
@@ -107,14 +126,16 @@ export default function SmartTest() {
                             <button 
                                 onClick={() => { setResult(null); setSummary(null); }}
                                 className="dy-btn-primary"
+                                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                             >
-                                🔁 {t("retakeAssessment")}
+                                <RefreshCw size={18} /> {t("retakeAssessment")}
                             </button>
                             <button 
                                 onClick={() => navigate('/dycalculia', { replace: true })}
                                 className="dy-btn-secondary"
+                                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                             >
-                                🏠 {t("moduleHome")}
+                                <HomeIcon size={18} /> {t("moduleHome")}
                             </button>
                         </div>
                     </div>

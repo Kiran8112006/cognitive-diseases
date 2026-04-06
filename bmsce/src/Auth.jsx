@@ -6,6 +6,7 @@ import {
     signInWithPopup,
     GoogleAuthProvider,
 } from "firebase/auth";
+import { Brain, Eye, EyeOff, ChevronLeft, Check, X } from "lucide-react";
 import "./auth.css";
 
 const googleProvider = new GoogleAuthProvider();
@@ -104,7 +105,7 @@ export default function Auth() {
 
     const RequirementItem = ({ met, label }) => (
         <div className={`requirement-item ${met ? 'met' : ''}`}>
-            <span className="requirement-icon">{met ? '✓' : '×'}</span>
+            <span className="requirement-icon">{met ? <Check size={14} strokeWidth={3} /> : <X size={14} strokeWidth={3} />}</span>
             <span className="requirement-text">{label}</span>
         </div>
     );
@@ -117,10 +118,7 @@ export default function Auth() {
 
                 <div className="auth-brand">
                     <div className="brand-header">
-                        <svg className="nav-logo-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-1.54Z" />
-                            <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-1.54Z" />
-                        </svg>
+                        <Brain className="nav-logo-icon" size={24} color="#2563eb" strokeWidth={2.5} />
                         <span className="brand-name">DDAP</span>
                     </div>
                     <h2 className="auth-heading">
@@ -150,7 +148,7 @@ export default function Auth() {
 
                 {isReset && (
                     <button className="auth-back-btn" onClick={() => go("login")}>
-                        ← Back to Login
+                        <ChevronLeft size={16} /> Back to Login
                     </button>
                 )}
 
@@ -192,15 +190,9 @@ export default function Auth() {
                                 aria-label={showPassword ? "Hide password" : "Show password"}
                             >
                                 {showPassword ? (
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                                        <line x1="1" y1="1" x2="23" y2="23"></line>
-                                    </svg>
+                                    <EyeOff size={20} strokeWidth={2} />
                                 ) : (
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                        <circle cx="12" cy="12" r="3"></circle>
-                                    </svg>
+                                    <Eye size={20} strokeWidth={2} />
                                 )}
                             </button>
                         </div>
@@ -236,15 +228,9 @@ export default function Auth() {
                                         aria-label={showConfirmPassword ? "Hide password" : "Show password"}
                                     >
                                         {showConfirmPassword ? (
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                                                <line x1="1" y1="1" x2="23" y2="23"></line>
-                                            </svg>
+                                            <EyeOff size={20} strokeWidth={2} />
                                         ) : (
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                                <circle cx="12" cy="12" r="3"></circle>
-                                            </svg>
+                                            <Eye size={20} strokeWidth={2} />
                                         )}
                                     </button>
                                 </div>
@@ -317,4 +303,3 @@ export default function Auth() {
         </>
     );
 }
-

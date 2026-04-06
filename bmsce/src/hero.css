@@ -187,9 +187,9 @@
 
 /* Mode Icons */
 .mode-icon-container {
-  width: 6.25rem; /* 100px */
-  height: 6.25rem;
-  border-radius: 1.5rem; /* 24px */
+  width: 8rem; /* 128px */
+  height: 8rem;
+  border-radius: 1.75rem; /* 28px */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -222,14 +222,14 @@
 }
 
 .mode-name {
-  font-size: 2.2rem;
+  font-size: 2.75rem;
   font-weight: 700;
   margin-bottom: 16px;
   color: #ffffff;
 }
 
 .mode-desc {
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   color: #94a3af;
   line-height: 1.6;
   margin-bottom: 40px;

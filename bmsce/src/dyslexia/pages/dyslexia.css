@@ -197,8 +197,8 @@
 }
 
 .dys-carousel-viewport {
-  width: 23.75rem; /* 380px */
-  height: 17.5rem; /* 280px */
+  width: 32rem; /* 512px */
+  height: 24rem; /* 384px */
   position: relative;
   cursor: pointer;
   perspective: 1200px;
@@ -236,14 +236,14 @@
 }
 
 .dys-carousel-title {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 700;
   color: #ffffff;
   margin-bottom: 12px;
 }
 
 .dys-carousel-desc {
-  font-size: 0.95rem;
+  font-size: 1.1rem;
   color: #94a3af;
 }
 
